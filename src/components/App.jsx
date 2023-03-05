@@ -1,7 +1,7 @@
 import { Component } from 'react';
 
 import { ToastContainer, toast } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 import Searchbar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
@@ -24,9 +24,9 @@ export default class App extends Component {
     return fetch(
       `${this.state.URL}?q=${this.state.query}&page=${this.state.page}&key=${this.state.API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
     )
-      .then(res => {
-        if (res.ok) {
-          return res.json();
+      .then(response => {
+        if (response.ok) {
+          return response.json();
         }
         return Promise.reject(new Error('Failed to find any images'));
       })
@@ -50,7 +50,7 @@ export default class App extends Component {
       .catch(error => this.setState({ error, status: 'rejected' }));
   };
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(_, prevState) {
     if (this.state.query !== prevState.query) {
       this.setState({ status: 'pending', pictures: [], page: 1 });
       this.fetchImg();
@@ -78,13 +78,13 @@ export default class App extends Component {
     const { pictures, status, totalHits } = this.state;
     return (
       <>
+        <ToastContainer autoClose={2000} />
         <Searchbar onSubmit={this.processSubmit} />
         {pictures.length && <ImageGallery images={pictures} />}
         {totalHits > pictures.length && (
           <Button onClick={this.handleLoadMore} />
         )}
         {status === 'pending' && <Loader />}
-        <ToastContainer autoClose={2000} />
       </>
     );
   }

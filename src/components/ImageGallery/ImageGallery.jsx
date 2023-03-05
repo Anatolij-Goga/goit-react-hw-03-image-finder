@@ -8,19 +8,19 @@ import { Gallery } from './ImageGallery.styled';
 export default class ImageGallery extends Component {
   state = {
     showModal: false,
-    bigPic: null,
+    bigPicture: null,
   };
 
   componentDidMount() {
-    document.addEventListener('click', e => {
-      if (e.target.nodeName !== 'IMG') {
+    document.addEventListener('click', event => {
+      if (event.target.nodeName !== 'IMG') {
         this.setState({ showModal: false });
         return;
       } else {
-        let picture = this.props.images.filter(obj => {
-          return obj.id === parseInt(e.target.alt);
+        let picture = this.props.images.filter(object => {
+          return object.id === parseInt(event.target.alt);
         });
-        this.setState({ bigPic: picture[0].largeImageURL });
+        this.setState({ bigPicture: picture[0].largeImageURL });
       }
     });
   }
@@ -30,7 +30,7 @@ export default class ImageGallery extends Component {
   };
 
   render() {
-    const { showModal, bigPic } = this.state;
+    const { showModal, bigPicture } = this.state;
     return (
       <>
         <Gallery onClick={this.toggleModal}>
@@ -44,8 +44,8 @@ export default class ImageGallery extends Component {
             );
           })}
         </Gallery>
-        {showModal && bigPic && (
-          <Modal onClose={this.toggleModal} pic={bigPic} />
+        {showModal && bigPicture && (
+          <Modal onClose={this.toggleModal} pic={bigPicture} />
         )}
       </>
     );
